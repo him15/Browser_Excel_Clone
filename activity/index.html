@@ -5,11 +5,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel Clone</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="style.css"></link>
 </head>
 <body>
-    <div class="menu_container"></div>
-    <div class="formula_container"></div>
-    <div class="grid"></div>
-    <div class="sheets"></div>
+    <div class="menu_container">Menu</div>
+    <div class="formulla_container">Formulla</div>
+    <!-- <div class="grid">Grid</div> -->
+    <div class="grid_container">
+        <div class="top_left_block"></div>
+        <div class="top_row">
+            <div class="col"></div>
+        </div>
+        <div class="left_col">
+            <div class="left_col_box"></div>
+        </div>
+        <div class="grid"></div>
+    </div>
+    <div class="sheets">
+        <div class="add_sheet_container">
+            <i class="fas fa-plus icon"></i>
+        </div>
+        <div class="sheets_list">
+            <div class="sheet active_sheet" sheetIdx="0"> Sheet 1</div>
+        </div>
+    </div>
+
+
+    <script src="init.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

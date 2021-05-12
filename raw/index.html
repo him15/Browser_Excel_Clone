@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0px;
+        }
+        *{
+            box-sizing: border-box;
+        }
+        .top_left_block{
+            height: 30px;
+            width: 25px;
+            background-color: gray;
+        }
+        .grid_container{
+            /* now absolute wala parent ke hisab se align ho jaega */
+            position: relative;
+        }
+        .top_row{
+            height: 30px;
+            background-color: lightgreen;
+            display: flex;
+            position: absolute;
+            top: 0px;
+            left: 25px;
+            
+        }
+        .col{
+            /* flex: 1; */
+            /* that means minimum to 70px rahege hi */
+            min-width: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid;
+            min-height: 30px;
+        }
+        .left_col{
+            width: 25px;
+        }
+        .left_col_box{
+            height: 30px;
+            background-color: lightgreen;
+            text-align: center;
+            border: 1px solid;
+        }
+        .row{
+            display: flex;
+        }
+        .grid{
+            position: absolute;
+            top: 30px;
+            left: 25px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="grid_container">
+        <div class="top_left_block"></div>
+        <div class="top_row">
+            <div class="col"></div>
+        </div>
+        <div class="left_col">
+            <div class="left_col_box"></div>
+        </div>
+        <div class="grid"></div>
+    </div>
+
+
+    <script>
+        let topRow=document.querySelector(".top_row");
+        let str="";
+        for(let i=0;i<26;i++){
+            str += `<div class='col'> ${String.fromCharCode(65+i)}</div>`;
+        }
+        topRow.innerHTML=str;
+        
+        let leftCol=document.querySelector(".left_col");
+        str=""
+        for(let i=0;i<100;i++){
+             str += `<div class='left_col_box'>${i+1}</div>`;
+        }
+        leftCol.innerHTML=str;
+
+        //2D array
+        let grid=document.querySelector(".grid");
+        str="";
+        for(let i=0; i < 100 ; i++){
+            str += `<div class="row">`;
+            for(let j=0 ; j<26 ; j++){
+                str += `<div class='col'>${ i + 1 }${String.fromCharCode(65 + j)}</div>`;
+            }
+            str += "</div>";
+        }
+        grid.innerHTML = str;
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+body{
+    margin: 0;
+}
+*{
+    box-sizing: border-box;
+}
+
+.menu_container{
+    background-color: lightblue;
+    height: 80px;
+}
+
+.formulla_container{
+    background-color: rgb(121, 131, 138);
+    height: 30px;
+}
+
+.sheets{
+    background-color: lightgrey;
+    display: flex;
+    height: 40px;
+    overflow: auto;
+}
+.add_sheet_container{
+    height: 100%;
+    width: 35px;
+    border: 1px solid grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.icon{
+    font-size: 1.4rem;
+    color: lightgreen;
+}
+.sheets_list{
+    display: flex;
+    height: 100%;
+}
+.sheet{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+}
+.active_sheet{
+    background-color: white;
+}
+
+
+
+/* --------Grid container CSS ----------*/
+.top_left_block{
+    height: 30px;
+    width: 25px;
+    background-color: gray;
+}
+.top_row{
+    height: 30px;
+    background-color: lightgreen;
+    display: flex;
+    position: absolute;
+    top: 0px;
+    left: 25px;
+    
+}
+.col{
+    /* flex: 1; */
+    /* that means minimum to 70px rahege hi */
+    min-width: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+    min-height: 30px;
+}
+.left_col{
+    width: 25px;
+}
+.left_col_box{
+    height: 30px;
+    background-color: lightgreen;
+    text-align: center;
+    border: 1px solid;
+}
+.row{
+    display: flex;
+}
+.grid{
+    position: absolute;
+    top: 30px;
+    left: 25px;
+}
+
+.grid_container{
+    /* now absolute wala parent ke hisab se align ho jaega */
+    position: relative;
+    overflow: auto;
+    height:calc(100vh - ( 80px + 30px + 40px ) ) ;
+}
+
+
+/* ````````````````````````````````` */
