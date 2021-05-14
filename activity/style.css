@@ -113,19 +113,15 @@ body{
     height: 100%;
     overflow-x: auto;
 }
-
-/* ---Hide the scroll bar--- */
+              /* ---Hide the scroll bar--- */
 .sheets_list::-webkit-scrollbar {
     display: none;
   }
-  
-  /* Hide scrollbar for IE, Edge and Firefox */
+ /* Hide scrollbar for IE, Edge and Firefox */
   .sheets_list {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
-
-/* ---------------- */
 .sheet{
     display: flex;
     align-items: center;
@@ -159,11 +155,12 @@ body{
     /* flex: 1; */
     /* that means minimum to 70px rahege hi */
     min-width: 85px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    max-width: 85px;
     border: 1px solid;
     min-height: 30px;
+    /* text-align: center; */
+    /* display: flex; */
+    /* justify-content: center; */
 }
 .left_col{
     width: 25px;
