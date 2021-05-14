@@ -9,8 +9,52 @@
     <link rel="stylesheet" href="style.css"></link>
 </head>
 <body>
-    <div class="menu_container">Menu</div>
-    <div class="formulla_container">Formulla</div>
+    <div class="menu_container">
+        <div class="formating_container">
+            <div class="subgroup">
+                    <select id="font_family" class="font_family">
+                        <option value="Arial">Arial</option>
+                        <option value="Cambria">Cambria</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Monospace">Monospace</option>
+                        <option value="Sans-Serif">Sans-Serif</option>
+                        <option value="Fantasy">Fantasy</option>
+                    </select>
+                <div class="BUI_container">
+                    <input type="button" value="B">
+                    <input type="button" value="I">
+                    <input type="button" value="U">
+                </div>
+            </div>
+            <div class="subgroup">
+                    <select id="font_size" class="font_size">
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                        <option value="12">12</option>
+                        <option value="16">16</option>
+                        <option value="20">20</option>
+                        <option value="32">32</option>
+                    </select>
+                <div class="color_container">
+                    <input type="color"  id="color">
+                    <input type="color"  id="bg_color">
+                </div>
+            </div>
+        </div>
+        <div class="alignment_container">
+            <input type="button" value="L">
+            <input type="button" value="C">
+            <input type="button" value="R">
+        </div>
+    </div>
+
+    <div class="formulla_container">
+        <input type="text" class="address_box" readonly >
+        <div class="seperator">:</div>
+        <input type="text" class="formulla_box">
+    </div>
+    
+    
     <!-- <div class="grid">Grid</div> -->
     <div class="grid_container">
         <div class="top_left_block"></div>

@@ -5,15 +5,90 @@ body{
     box-sizing: border-box;
 }
 
+/* ***************************************8 */
 .menu_container{
     background-color: lightblue;
     height: 80px;
+    display: flex;
+    align-items: center;
+}
+            /* all cildren of menu container */
+.menu_container>*{
+    height: 80%;
+    width: 20%;
+    border-right: 2px solid black;
+}
+.alignment_container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.alignment_container>*{
+    width: 20%;
+}
+.formating_container{
+    display: flex;
+    justify-content: space-around;
+}
+.subgroup{ 
+    width: 45%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.subgroup>*{
+    width: 100%;
+}
+.BUI_container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.BUI_container>*{
+    width: 30%;
+
+}
+.color_container{
+    display: flex;
+    justify-content: space-between;
+}
+.color_container>*{
+    width: 45%;
 }
 
+/* ******************************* */
+
+
+
+
+
+/* ``````````````````````Formulla container````````````````````````` */
 .formulla_container{
-    background-color: rgb(121, 131, 138);
+    background-color: rgb(178, 186, 192);
     height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
 }
+.address_box{
+    width: 10%;;
+}
+.formulla_box{
+    width: 78%;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 .sheets{
     background-color: lightgrey;
@@ -23,7 +98,7 @@ body{
 }
 .add_sheet_container{
     height: 100%;
-    width: 35px;
+    min-width: 35px;
     border: 1px solid grey;
     display: flex;
     justify-content: center;
@@ -36,12 +111,26 @@ body{
 .sheets_list{
     display: flex;
     height: 100%;
+    overflow-x: auto;
 }
+
+/* ---Hide the scroll bar--- */
+.sheets_list::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .sheets_list {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+/* ---------------- */
 .sheet{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
+    min-width: 70px;
 }
 .active_sheet{
     background-color: white;
@@ -49,7 +138,9 @@ body{
 
 
 
-/* --------Grid container CSS ----------*/
+
+
+/* --------Grid container CSS ---------`````````````````````-*/
 .top_left_block{
     height: 30px;
     width: 25px;
@@ -98,6 +189,9 @@ body{
     overflow: auto;
     height:calc(100vh - ( 80px + 30px + 40px ) ) ;
 }
+/* ````````````````````````````````````````` */
 
 
-/* ````````````````````````````````` */
+
+
+
