@@ -7,14 +7,15 @@ let leftBtn=document.querySelector(".left");
 let centerBtn=document.querySelector(".center");
 let rightBtn=document.querySelector(".right");
 let sizeBtn= document.querySelector(".font_size");
-let bold=document.querySelector(".bold");
-let italic=document.querySelector(".italic");
-let underline=document.querySelector(".underline");
+let boldEle=document.querySelector(".bold");
+let italicEle=document.querySelector(".italic");
+let underlineEle=document.querySelector(".underline");
 let color=document.querySelector(".color");
 let bgColor=document.querySelector(".bg_color");
+let fontFamily=document.querySelector(".font_family");
 
 
-// sheet 1 ka event listener
+// sheet 1 ka event listener -> create sheet and give them
 firstSheet.addEventListener("click" , handleActiveSheet);
 
 addBtnContainer.addEventListener("click" , function(){
@@ -32,10 +33,7 @@ addBtnContainer.addEventListener("click" , function(){
     // for active class -> sheet 2 se event listener
     NewSheet.addEventListener("click" , handleActiveSheet)
     
-    
 })
-
-
 function handleActiveSheet(e){
     let MySheet=e.currentTarget;
     let sheetsArr=document.querySelectorAll(".sheet"); 
@@ -49,8 +47,11 @@ function handleActiveSheet(e){
         MySheet.classList.add("active_sheet");
     }
 }
+// *************************
 
-// print the address into the address bar
+
+
+// address set on click of cell
 for(let i=0;i<allCells.length;i++){
     allCells[i].addEventListener("click" , function(){
         let rid=Number(allCells[i].getAttribute("rid"));
@@ -61,8 +62,11 @@ for(let i=0;i<allCells.length;i++){
         addressBox.value=address;
     })
 }
+// initial cell click emulate
 allCells[0].click();
 
+
+// ****************Formatting****************
 leftBtn.addEventListener("click" , function(){
     let address=addressBox.value;
     let {cid , rid} = getRidCidFromAddress(address);
@@ -70,7 +74,6 @@ leftBtn.addEventListener("click" , function(){
     let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
     cell.style.textAlign="left";
 })
-
 rightBtn.addEventListener("click" , function(){
     let address=addressBox.value;
     let {cid , rid} = getRidCidFromAddress(address);
@@ -78,7 +81,6 @@ rightBtn.addEventListener("click" , function(){
     let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
     cell.style.textAlign= "right";
 })
-
 centerBtn.addEventListener("click" , function(){
     let address=addressBox.value;
     let {cid , rid} = getRidCidFromAddress(address);
@@ -86,26 +88,73 @@ centerBtn.addEventListener("click" , function(){
     let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
     cell.style.textAlign= "center";    
 })
-
 sizeBtn.addEventListener("change" , function(){
-    let fontSize=sizeBtn.value;
+    let cSize=sizeBtn.value;
     let address=addressBox.value;
     let {rid , cid}=getRidCidFromAddress(address);
     let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
+    cell.style.fontSize=cSize;
 })
+fontFamily.addEventListener("change" , function(){
+    let address=addressBox.value;
+    let cFont = fontFamily.value;
+    let {rid , cid}=getRidCidFromAddress(address);
+    let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
+    cell.style.fontFamily = cFont;
+})
+// **********************
 
-bold.addEventListener("click" , function(){
+boldEle.addEventListener("click" , function(){
+    let isActive = boldEle.classList.contains("active_btn");
     let address=addressBox.value;
     let {rid , cid}=getRidCidFromAddress(address);
     let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
-    cell.style.fontWeight="bolder";
+    if(isActive == false){
+        // cell text bold 
+        cell.style.fontWeight="bolder";
+        boldEle.classList.add("active_btn");
+    }else{
+        cell.style.fontWeight="normal";
+        boldEle.classList.remove("active_btn");
+        
+    }
+})
+italicEle.addEventListener("click" , function(){
+    let isActive = italicEle.classList.contains("active_btn");
+    let address=addressBox.value;
+    let {rid , cid}=getRidCidFromAddress(address);
+    let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
+    if(isActive == false){
+        // cell text bold 
+        cell.style.fontStyle="italic";
+        italicEle.classList.add("active_btn");
+    }else{
+        cell.style.fontStyle="normal";
+        italicEle.classList.remove("active_btn");
+        
+    }
+})
+underlineEle.addEventListener("click" , function(){
+    let isActive = underlineEle.classList.contains("active_btn");
+    let address=addressBox.value;
+    let {rid , cid}=getRidCidFromAddress(address);
+    let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
+    if(isActive == false){
+        // cell text bold 
+        cell.style.textDecoration="underline";
+        underlineEle.classList.add("active_btn");
+    }else{
+        cell.style.textDecoration="normal";
+        underlineEle.classList.remove("active_btn");
+        
+    }
 })
 
 // color.addEventListener("change")
 
 
 
-
+// Helper function
 function getRidCidFromAddress(address){
     let cellCodeAdr=address.charCodeAt(0);
     let cellRowAdr=address.slice(1);
