@@ -25,23 +25,30 @@ for(let i=0; i < 100 ; i++){
 grid.innerHTML = str;
 
 
-// creating 2D array with the properties of each cells 
-
-let sheetDB=[];
-for(let i=0;i<100;i++){
-    let row = []
-    for(let j=0;j<26;j++){
-        // object of the properties
-        let cell = {
-            bold : false,
-            italic : "normal",
-            underline : "none",
-            fontFamily : "Arial",
-            fontSize : "8",
-            hAlign : "left"
-        };
-        row.push(cell);
+workSheetDB=[]; // all the sheets data with 2D array 
+// create the data of a single sheet
+function initCurrentSheetDb(){
+    // creating 2D array with the properties of each cells 
+     let sheetDB=[]; // stores all the cell styling data of each cell
+    for(let i=0;i<100;i++){
+        let row = []
+        for(let j=0;j<26;j++){
+            // object of the properties
+            let cell = {
+                bold : false,
+                italic : "normal",
+                underline : "none",
+                fontFamily : "Arial",
+                fontSize : "10",
+                hAlign : "left",
+                value : ""
+            };
+            row.push(cell);
+        }
+        sheetDB.push(row);
     }
-    sheetDB.push(row);
+    workSheetDB.push(sheetDB); 
+    console.log(workSheetDB);
+
 }
-console.log(sheetDB)
+initCurrentSheetDb();

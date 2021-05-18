@@ -14,6 +14,7 @@ let color=document.querySelector(".color");
 let bgColor=document.querySelector(".bg_color");
 let fontFamily=document.querySelector(".font_family");
 let allAlignBtns = document.querySelectorAll(".alignment_container>*");
+let sheetDB = workSheetDB[0]; // first 2D array
 
 
 // sheet 1 ka event listener -> create sheet and give them
@@ -31,10 +32,24 @@ addBtnContainer.addEventListener("click" , function(){
     NewSheet.innerText=`Sheet ${idx+2}`;
     sheetList.appendChild(NewSheet); // page add
 
+    // remove active sheet from all
+    sheetsArr.forEach(function(sheet){
+        sheet.classList.remove("active_sheet");
+    })
+    sheetsArr = document.querySelectorAll(".sheet");
+    sheetsArr[sheetsArr.length - 1].classList.add("active_sheet"); // adding in last 
+
+    initCurrentSheetDb(); // creating the new database
+    sheetDB = workSheetDB[idx + 1]; // sheetDB will point last idx 2D Array
+
+    initUI(); // we came into new sheet then empty all the cells 
+
     // for active class -> sheet 2 se event listener
-    NewSheet.addEventListener("click" , handleActiveSheet)
+    NewSheet.addEventListener("click" , handleActiveSheet);
     
 })
+
+// jispe ham click kare uspe active class set ho jae
 function handleActiveSheet(e){
     let MySheet=e.currentTarget;
     let sheetsArr=document.querySelectorAll(".sheet"); 
@@ -47,8 +62,16 @@ function handleActiveSheet(e){
     if(!MySheet.classList[1]){
         MySheet.classList.add("active_sheet");
     }
+    // index of clicked sheet
+    let sheetIdx = MySheet.getAttribute("sheetIdx");
+    sheetDB = workSheetDB[sheetIdx
+    ]; 
+    setUI(sheetDB); // get data from sheet and set in UI
+
 }
 // *************************
+
+
 
 
 
@@ -245,3 +268,42 @@ function getRidCidFromAddress(address){
     return{cid , rid};
 }
 
+// clear all the data -> do blank sheet
+function initUI(){
+    for(let i=0; i < allCells.length;i++){
+        allCells[i].style.fontWeight = "normal";
+        allCells[i].style.fontStyle = "normal";
+        allCells[i].style.textDecoration = "none";
+        allCells[i].style.fontFamily = "Arial";
+        allCells[i].style.fontSize = "10px";
+        allCells[i].style.textAlign = "left";
+        allCells[i].innerText = "";
+    }
+
+}
+
+// har cell pe jo bhi value ho usse save kar do database pe
+for(let i=0;i<allCells.length;i++){
+    allCells[i].addEventListener("blur" , function handleCell(){
+        let address=addressBox.value;
+        let {rid , cid}=getRidCidFromAddress(address);
+        let cellObject = sheetDB[rid][cid];
+        let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
+        cellObject.value = cell.innerText;
+    })
+}
+
+
+// taking the values from database and pasting in the UI 
+function setUI(sheetDB){
+    // we will loop the 2D Array
+    for(let i=0;i<sheetDB.length;i++){
+        for(let j=0;j<sheetDB[i].length;j++){
+            let cell = document.querySelector(`.col[rid="${i}"][cid="${j}"]`);
+            let {bold,italic,underline,fontFamily,fontSize,hAlign,value}=sheetDB[i][j];
+            cell.style.fontWeight =bold==true?"bold":"normal";
+            cell.style.textDecoration =italic =="normal" ? "normal":"italic";
+            cell.innerText = value;
+        }
+    }
+}
