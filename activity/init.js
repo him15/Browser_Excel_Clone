@@ -39,7 +39,7 @@ function initCurrentSheetDb(){
                 italic : "normal",
                 underline : "none",
                 fontFamily : "Arial",
-                fontSize : "10",
+                fontSize : "16px",
                 hAlign : "left",
                 value : ""
             };

@@ -15,7 +15,7 @@ let bgColor=document.querySelector(".bg_color");
 let fontFamily=document.querySelector(".font_family");
 let allAlignBtns = document.querySelectorAll(".alignment_container>*");
 let sheetDB = workSheetDB[0]; // first 2D array
-
+let formullaInput = document.querySelector(".formulla_box");
 
 // sheet 1 ka event listener -> create sheet and give them
 firstSheet.addEventListener("click" , handleActiveSheet);
@@ -190,7 +190,7 @@ sizeBtn.addEventListener("change" , function(){
     let address=addressBox.value;
     let {rid , cid}=getRidCidFromAddress(address);
     let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
-    cell.style.fontSize=cSize;
+    cell.style.fontSize=cSize+6+"px";
 })
 fontFamily.addEventListener("change" , function(){
     let address=addressBox.value;
@@ -275,7 +275,7 @@ function initUI(){
         allCells[i].style.fontStyle = "normal";
         allCells[i].style.textDecoration = "none";
         allCells[i].style.fontFamily = "Arial";
-        allCells[i].style.fontSize = "10px";
+        allCells[i].style.fontSize = "16px";
         allCells[i].style.textAlign = "left";
         allCells[i].innerText = "";
     }
@@ -306,4 +306,55 @@ function setUI(sheetDB){
             cell.innerText = value;
         }
     }
+}
+
+
+
+
+
+
+
+// ************* Formulla Logic ***********************
+formullaInput.addEventListener("keydown" , function(e){
+    // steps to do
+    //     1. get Current cell
+    //     2. evalute(formulla); -> Evaluate the formulla 
+    //     3. setUI(change); ->  Change In the UI
+    //     4. setContentDB(value , formulla); -> set the content 
+    if(e.key == "Enter" && formullaInput.value != ""){
+        let formulla = formullaInput.value;
+        let value = evaluateFormulla(formulla);
+        // now set on UI
+        let address = addressBox.value;
+        let {rid , cid } = getRidCidFromAddress(address);
+        setUIByFormulla(value , rid , cid);        
+
+    }
+        
+})
+
+function evaluateFormulla(formulla){
+    // "( A1 + A2)"
+    // split it ->  [(, A1, A2, )]
+    // find the value of A1 and A2 from database
+    // [(, 10, 20, )]
+    // ( 10 + 20)
+    let formullaTokens = formulla.split(" ");
+    for(let i=0 ; i < formullaTokens.length ; i++){
+        let firstCharOfToken = formullaTokens[i].charCodeAt(0);
+        if(firstCharOfToken >= 65 && firstCharOfToken <= 90){
+            let {rid , cid} = getRidCidFromAddress(formullaTokens[i]);
+            let cellObject = sheetDB[rid][cid];
+            let { value } = cellObject;
+            // replace the value in the formulla
+            formulla = formulla.replace(formullaTokens[i] , value);
+        }
+    }
+    let ans = eval(formulla);
+    return ans;
+}
+
+function setUIByFormulla(value , rid , cid){
+    document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`).innerText = value;
+
 }
