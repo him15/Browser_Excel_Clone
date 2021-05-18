@@ -253,7 +253,8 @@ underlineEle.addEventListener("click" , function(){
         cellObject.underline="none";
         
     }
-})
+}) 
+
 
 // color.addEventListener("change")
 
