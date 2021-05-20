@@ -291,6 +291,9 @@ for(let i=0;i<allCells.length;i++){
         let cellObject = sheetDB[rid][cid];
         let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
         cellObject.value = cell.innerText;
+
+        // implementing case 2 of logic formulla
+        changeChildrens(cellObject);
     })
 }
 
@@ -324,11 +327,12 @@ formullaInput.addEventListener("keydown" , function(e){
     //     4. setContentDB(value , formulla); -> set the content 
     if(e.key == "Enter" && formullaInput.value != ""){
         let formulla = formullaInput.value;
-        let value = evaluateFormulla(formulla);
+        let evaluatedValue = evaluateFormulla(formulla);
         // now set on UI
         let address = addressBox.value;
         let {rid , cid } = getRidCidFromAddress(address);
-        setUIByFormulla(value , rid , cid);        
+        setUIByFormulla(evaluatedValue , rid , cid);    
+        setContentInDB(evaluatedValue , formulla , rid , cid , address );  //update value -> update formulla -> update the dependency in parent    
 
     }
         
@@ -355,7 +359,42 @@ function evaluateFormulla(formulla){
     return ans;
 }
 
-function setUIByFormulla(value , rid , cid){
-    document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`).innerText = value;
+function setUIByFormulla(evaluatedValue , rid , cid){
+    document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`).innerText = evaluatedValue;
 
+}
+function setContentInDB(value , formulla , rid , cid , address ){
+    let cellObject = sheetDB[rid][cid]; // cell object where we have to change the value
+    cellObject.value = value; // set the value in db
+    cellObject.formulla = formulla; // set formulla in db
+
+    // Now we have to find the parent rid and cid(by the help of formulla) so that we can update the parent's children array
+    let formullaTokens = formulla.split(" ");
+    for(let i=0 ; i < formullaTokens.length ; i++){
+        let firstCharOfToken = formullaTokens[i].charCodeAt(0);
+        if(firstCharOfToken >= 65 && firstCharOfToken <= 90){
+            let parentRidCid = getRidCidFromAddress(formullaTokens[i]); // parent rid , Cid
+            let cellObject = sheetDB[parentRidCid.rid][parentRidCid.cid];
+            // update the parent's children array
+            cellObject.children.push(address); // pushing the address of the children in parents children array 
+        }
+    }
+}
+
+function changeChildrens(cellObject){
+    let childrens= cellObject.children;
+    for(let i=0;i < childrens.length;i++){
+        let chAddress = childrens[i];
+        let chRidCidObj= getRidCidFromAddress(chAddress);
+        let chObj = sheetDB[chRidCidObj.rid][chRidCidObj.cid];
+        let formulla = chObj.formulla;
+        let evaluatedValue = evaluateFormulla(formulla);
+        setUIByFormulla(evaluatedValue , chRidCidObj.rid , chRidCidObj.cid);
+        
+        chObj.value = evaluatedValue; // set the value in db
+        chObj.formulla = evaluatedValue; // set formulla in db
+
+
+        changeChildrens(chObj); // apne childrens ko bhi update karo 
+    }
 }
