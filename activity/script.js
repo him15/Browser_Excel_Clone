@@ -85,10 +85,20 @@ for(let i=0;i<allCells.length;i++){
         let address=colAdd+rowAdd;
         addressBox.value=address;
         
+
         // ------ Later After Setting the formatting-----
         // styling -> set 
         // object Styling set -> har set ka alag object hai
         let cellObject = sheetDB[rid][cid];
+        console.log(cellObject.formulla);
+
+        if(cellObject.formulla != ""){
+            console.log(cellObject.formulla);
+            formullaInput.value = cellObject.formulla;
+        }else{
+            formullaInput.value="";
+        }
+
         // boldness
         if(cellObject.bold == true){
             boldEle.classList.add("active_btn");
@@ -283,19 +293,6 @@ function initUI(){
 
 }
 
-// har cell pe jo bhi value ho usse save kar do database pe
-for(let i=0;i<allCells.length;i++){
-    allCells[i].addEventListener("blur" , function handleCell(){
-        let address=addressBox.value;
-        let {rid , cid}=getRidCidFromAddress(address);
-        let cellObject = sheetDB[rid][cid];
-        let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
-        cellObject.value = cell.innerText;
-
-        // implementing case 2 of logic formulla
-        changeChildrens(cellObject);
-    })
-}
 
 
 // taking the values from database and pasting in the UI 
@@ -319,24 +316,62 @@ function setUI(sheetDB){
 
 
 // ************* Formulla Logic ***********************
+// value - > value
+// formulla value -> manually value set 
+// har cell pe jo bhi value ho usse save kar do database pe
+for(let i=0;i<allCells.length;i++){
+    allCells[i].addEventListener("blur" , function handleCell(){
+        let address=addressBox.value;
+        let {rid , cid}=getRidCidFromAddress(address);
+        let cellObject = sheetDB[rid][cid];
+        let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
+        // case 3
+            if(cellObject.formulla && cellObject.value != cell.innerText){
+                removeFormulla(cellObject , address);
+            }
+            cellObject.value = cell.innerText;
+            // implementing case 2 of logic formulla
+            changeChildrens(cellObject); // jo depend karte hai unhe update kar do
+
+
+    })
+}
+
+
+// formulla bar enter
+// value -> formulla set 
+// old formulla -> new formulla
 formullaInput.addEventListener("keydown" , function(e){
+
     // steps to do
     //     1. get Current cell
     //     2. evalute(formulla); -> Evaluate the formulla 
     //     3. setUI(change); ->  Change In the UI
     //     4. setContentDB(value , formulla); -> set the content 
     if(e.key == "Enter" && formullaInput.value != ""){
-        let formulla = formullaInput.value;
-        let evaluatedValue = evaluateFormulla(formulla);
+        let Newformulla = formullaInput.value;
         // now set on UI
         let address = addressBox.value;
         let {rid , cid } = getRidCidFromAddress(address);
+        // change the formulla
+        let cellObject = sheetDB[rid][cid];
+        let prevFormulla = cellObject.formulla;
+        if(prevFormulla == Newformulla ){
+            return;
+        }
+        if( prevFormulla != "" && prevFormulla != Newformulla){
+            removeFormulla(cellObject , address);
+        }
+        let evaluatedValue = evaluateFormulla(Newformulla);
+        //----
         setUIByFormulla(evaluatedValue , rid , cid);    
-        setContentInDB(evaluatedValue , formulla , rid , cid , address );  //update value -> update formulla -> update the dependency in parent    
-
+        setContentInDB(evaluatedValue , Newformulla , rid , cid , address );  //update value -> update formulla -> update the dependency in parent    
+        
+        changeChildrens(cellObject);
     }
         
 })
+
 
 function evaluateFormulla(formulla){
     // "( A1 + A2)"
@@ -358,6 +393,10 @@ function evaluateFormulla(formulla){
     let ans = eval(formulla);
     return ans;
 }
+
+
+
+
 
 function setUIByFormulla(evaluatedValue , rid , cid){
     document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`).innerText = evaluatedValue;
@@ -392,9 +431,24 @@ function changeChildrens(cellObject){
         setUIByFormulla(evaluatedValue , chRidCidObj.rid , chRidCidObj.cid);
         
         chObj.value = evaluatedValue; // set the value in db
-        chObj.formulla = evaluatedValue; // set formulla in db
-
-
         changeChildrens(chObj); // apne childrens ko bhi update karo 
     }
+}
+
+// remove overself from my parents children array
+function removeFormulla(cellObject , address){
+    let formulla = cellObject.formulla;
+    let formullaTokens = formulla.split(" ");
+    for(let i=0 ; i < formullaTokens.length ; i++){
+        let firstCharOfToken = formullaTokens[i].charCodeAt(0);
+        if(firstCharOfToken >= 65 && firstCharOfToken <= 90){
+            let parentRidCid = getRidCidFromAddress(formullaTokens[i]); // parent rid , Cid
+            let parentcellObject = sheetDB[parentRidCid.rid][parentRidCid.cid];
+            
+            let childrens=parentcellObject.children;
+            let idx = childrens.indexOf(address);
+            childrens.splice(idx , 1);
+        }
+    }
+    cellObject.formulla = "";
 }

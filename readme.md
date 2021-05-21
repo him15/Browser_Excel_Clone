@@ -56,8 +56,6 @@ This application is a Excel Clone.
                 In case of B1 if we directly change the value so it should not pass to its children.
             
             LOGIC TO BE IMPLEMENTED IN CASE 3 : 
-                * if Formulla is present and we change the value then  clear the formulla\
-                
-                .
+                * if Formulla is present and we change the value then  clear the formulla
                 * remove yourself from your parents array children.
 
