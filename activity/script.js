@@ -16,6 +16,11 @@ let fontFamily=document.querySelector(".font_family");
 let allAlignBtns = document.querySelectorAll(".alignment_container>*");
 let sheetDB = workSheetDB[0]; // first 2D array
 let formullaInput = document.querySelector(".formulla_box");
+let gridContainer = document.querySelector(".grid_container");
+let topLeftBlock = document.querySelector(".top_left_block");
+
+
+
 
 // sheet 1 ka event listener -> create sheet and give them
 firstSheet.addEventListener("click" , handleActiveSheet);
@@ -71,6 +76,15 @@ function handleActiveSheet(e){
 }
 // *************************
 
+// grid scrolling fix
+gridContainer.addEventListener("scroll" , function(e){
+    let top = gridContainer.scrollTop;
+    let left = gridContainer.scrollLeft;
+    topLeftBlock.style.top = top+"px";
+    topRow.style.top = top+"px";
+    leftCol.style.left = left+"px";
+    topLeftBlock.style.left = left + "px";
+})
 
 
 
@@ -140,6 +154,17 @@ for(let i=0;i<allCells.length;i++){
         }
 
     })
+
+
+    // for height 
+    allCells[i].addEventListener("keydown" , function(){
+        let obj = allCells[i].getBoundingClientRect();
+        let height = obj.height;
+        let address = addressBox.value;
+        let {cid , rid} = getRidCidFromAddress(address);
+        let leftCol = document.querySelectorAll(".left_col .left_col_box")[rid];
+        leftCol.style.height = height+"px";
+    })
 }
 // initial cell click emulate
 allCells[0].click();
@@ -149,7 +174,6 @@ allCells[0].click();
 leftBtn.addEventListener("click" , function(){
     let address=addressBox.value;
     let {cid , rid} = getRidCidFromAddress(address);
-    console.log(cid , rid);
     let cell = document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`);
     cell.style.textAlign="left";
     // *********
@@ -270,14 +294,7 @@ underlineEle.addEventListener("click" , function(){
 
 
 
-// Helper function
-function getRidCidFromAddress(address){
-    let cellCodeAdr=address.charCodeAt(0);
-    let cellRowAdr=address.slice(1);
-    let cid = cellCodeAdr - 65;
-    let rid = Number(cellRowAdr) - 1;
-    return{cid , rid};
-}
+
 
 // clear all the data -> do blank sheet
 function initUI(){
@@ -294,20 +311,6 @@ function initUI(){
 }
 
 
-
-// taking the values from database and pasting in the UI 
-function setUI(sheetDB){
-    // we will loop the 2D Array
-    for(let i=0;i<sheetDB.length;i++){
-        for(let j=0;j<sheetDB[i].length;j++){
-            let cell = document.querySelector(`.col[rid="${i}"][cid="${j}"]`);
-            let {bold,italic,underline,fontFamily,fontSize,hAlign,value}=sheetDB[i][j];
-            cell.style.fontWeight =bold==true?"bold":"normal";
-            cell.style.textDecoration =italic =="normal" ? "normal":"italic";
-            cell.innerText = value;
-        }
-    }
-}
 
 
 
@@ -336,7 +339,6 @@ for(let i=0;i<allCells.length;i++){
 
     })
 }
-
 
 // formulla bar enter
 // value -> formulla set 
@@ -373,6 +375,11 @@ formullaInput.addEventListener("keydown" , function(e){
 })
 
 
+
+
+
+
+
 function evaluateFormulla(formulla){
     // "( A1 + A2)"
     // split it ->  [(, A1, A2, )]
@@ -394,14 +401,12 @@ function evaluateFormulla(formulla){
     return ans;
 }
 
-
-
-
-
 function setUIByFormulla(evaluatedValue , rid , cid){
     document.querySelector(`.col[rid="${rid}"][cid="${cid}"]`).innerText = evaluatedValue;
 
 }
+
+// formulla update , Value update , parent children array update
 function setContentInDB(value , formulla , rid , cid , address ){
     let cellObject = sheetDB[rid][cid]; // cell object where we have to change the value
     cellObject.value = value; // set the value in db
@@ -452,3 +457,37 @@ function removeFormulla(cellObject , address){
     }
     cellObject.formulla = "";
 }
+
+
+
+
+
+
+
+
+
+
+// `````````````````Helper function````````````````````````````````````````
+
+function getRidCidFromAddress(address){
+    let cellCodeAdr=address.charCodeAt(0);
+    let cellRowAdr=address.slice(1);
+    let cid = cellCodeAdr - 65;
+    let rid = Number(cellRowAdr) - 1;
+    return{cid , rid};
+}
+
+// taking the values from database and pasting in the UI 
+function setUI(sheetDB){
+    // we will loop the 2D Array
+    for(let i=0;i<sheetDB.length;i++){
+        for(let j=0;j<sheetDB[i].length;j++){
+            let cell = document.querySelector(`.col[rid="${i}"][cid="${j}"]`);
+            let {bold,italic,underline,fontFamily,fontSize,hAlign,value}=sheetDB[i][j];
+            cell.style.fontWeight =bold==true?"bold":"normal";
+            cell.style.textDecoration =italic =="normal" ? "normal":"italic";
+            cell.innerText = value;
+        }
+    }
+}
+
